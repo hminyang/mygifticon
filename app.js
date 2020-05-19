@@ -4,6 +4,7 @@ var path = require('path');
 const app = express();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mysql = require('mysql');
 const port = 3000;
 
 app.set('views', path.join(__dirname, 'views'));
