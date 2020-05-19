@@ -43,10 +43,6 @@ app.get('/about', function(req, res){
     res.render('about');
 })
 
-app.get('/login', function(req, res){
-  res.render('login');
-})
-
 /* /users 요청을 모두 /routes/index.js로 */
 app.use('/menu', menu);
 /* /users 요청을 모두 /routes/index.js로 */
