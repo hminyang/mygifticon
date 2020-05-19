@@ -43,33 +43,24 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>아메리카노</td>
-                      <td>3500원</td>
-                      <td>
-                        <input type="text" size="3"></input>
-                        <button class="plus" type="button" class="btn btn-primary">+</button>
-                        <button class="minus" type="button" class="btn btn-primary">-</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>카페라떼</td>
-                      <td>4000원</td>
-                      <td>
-                        <input type="text" size="3"></input>
-                        <button class="plus" type="button" class="btn btn-primary">+</button>
-                        <button class="minus" type="button" class="btn btn-primary">-</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>카페모카</td>
-                      <td>4500원</td>
-                      <td>
-                        <input type="text" size="3"></input>
-                        <button class="plus" type="button" class="btn btn-primary">+</button>
-                        <button class="minus" type="button" class="btn btn-primary">-</button>
-                      </td>
-                    </tr>
+                    <% if(data != null && data.length > 0){ %>
+                      
+                      <% for ( var i = 0; i < data.length; i++){ %>
+                        <tr>
+                          <td><%=data[i].name%></td>
+                          <td><%=data[i].price%></td>
+                          <td>
+                            <input type="text" size="3"></input>
+                            <button  type="button" class="btn btn-primary">+</button>
+                            <button  type="button" class="btn btn-primary">-</button>
+                          </td>
+                        </tr>
+                      <% } %>
+                    <% } %>
+                     
+                   
+                    
+                   
                   </tbody>
                 <tfoot>
                   <tr class="table-primary">
@@ -93,14 +84,5 @@
 
 
     </div>
-
-    <script src="js/global.script.js"></script>
-    <script>
-      $("#loginBtn").click(function(){
-       
-      });
-    
-    </script>
-
   </body>
 </html>

@@ -25,12 +25,13 @@ app.use(cookieParser());
 
 
 app.get('/main', function(req, res){
-    res.render('main');
+  res.render('main');
 })
 
 app.get('/about', function(req, res){
     res.render('about');
 })
+
 
 /* /users 요청을 모두 /routes/index.js로 */
 app.use('/menu', menu);
@@ -46,10 +47,12 @@ app.listen(port, function(){
 });
 
 // 404 처리 미들웨어
+/*
 app.use(function(req, res, next) {
     next(createError(404));
   });
-   
+  
+*/ 
   // 에러 핸들러
   app.use(function(err, req, res, next) {
     // set locals, only providing error in development
@@ -58,5 +61,6 @@ app.use(function(req, res, next) {
    
     // render the error page
     res.status(err.status || 500);
+    console.log(err);
     //res.render('error');
   });
