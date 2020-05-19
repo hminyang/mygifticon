@@ -4,7 +4,8 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
-  res.send('test');
+  //임시로
+  res.render('main');
 });
  
 module.exports = router;
