@@ -4,21 +4,10 @@ var path = require('path');
 const app = express();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mysql = require('mysql');
 const port = 3000;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-var connection = mysql.createConnection({
-    host     : '192.168.40.193',
-    user     : 'fintech',
-    password : '1q2w3e4r!',
-    database : 'fintech'
-  });
-   
-connection.connect();
-
 
 /* use router class */
 const menu = require('./routes/menu');
@@ -42,8 +31,6 @@ app.get('/main', function(req, res){
 app.get('/about', function(req, res){
     res.render('about');
 })
-
-
 
 /* /users 요청을 모두 /routes/index.js로 */
 app.use('/menu', menu);
