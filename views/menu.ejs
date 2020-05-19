@@ -75,7 +75,7 @@
                   <tr class="table-primary">
                     <td scope="row">총 금액</td>
                     <td>  </td>
-                    <td class="align-right">10000원
+                    <td id="totalamt" class="align-right">10000원
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <button id="buyBtn" type="button" class="btn btn-warning">구매하기</button>
                     </td>
@@ -92,12 +92,33 @@
       </footer>
 
     </div>
-    <script>
-      $("#buyBtn").click(function(){
-            var tmpWindow = window.open('about:blank')
-            tmpWindow.location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=fHeGuscbYeYoW4Fq9XZeyQSDXURTB3En3AB2pdV7&redirect_uri=http://localhost:3000/qrcode&scope=login inquiry transfer&state=12345678901234567890123456789012&auth_type=0"
-        })
-    </script>
+
+
+        <!-- JQuery library file. requared all pages -->
+        <script src="js/jquery-3.2.1.min.js"></script>
+
+        <!-- Template global script file. requared all pages -->
+        <script src="js/global.script.js"></script>
+
+        <script>
+          $("#buyBtn").click(function(){
+            var totalamt = 10000;
+            //$('#totalamt').text(); 이렇게 해서 받아오고싶은뎅
+            console.log(totalamt);
+
+            $.ajax({
+              url:'/payment',
+              type : 'POST',
+              data : {
+                  amount : totalamt,
+              },
+              success:function(data){
+                      alert(totalamt);
+                      window.location.href = '/payment'
+              }
+            })
+          })
+      </script>
 
   </body>
 </html>

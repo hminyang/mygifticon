@@ -46,9 +46,9 @@ app.listen(port, function(){
 });
 
 // 404 처리 미들웨어
-app.use(function(req, res, next) {
-    next(createError(404));
-  });
+// app.use(function(req, res, next) {
+//     next(createError(404));
+//   });
    
   // 에러 핸들러
   app.use(function(err, req, res, next) {

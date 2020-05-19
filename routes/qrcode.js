@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
   //임시로
   res.render('main');
+  
   getConnection((conn) => {
     var sql = "SELECT * FROM USER";
     conn.query(

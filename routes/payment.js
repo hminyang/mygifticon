@@ -1,16 +1,18 @@
 var express = require('express');
 var router = express.Router();
- 
-/* GET home page. */
-router.post('/', function(req, res, next) {
-  //res.render('index', { title: 'Express' });
 
+router.get('/', function(req, res){
+    res.render('qrcode');
+})
+
+router.post('/', function(req, res, next) {
   //var userId = req.decoded.userId;
   var userId = 7; //test용
-  var fin_use_num = req.body.fin_use_num;
+  //var fin_use_num = req.body.fin_use_num;
   
   var countnum = Math.floor(Math.random() * 1000000000) + 1;
   var transId = "T991628950U" + countnum; //이용기관번호 본인것 입력
+  //이용기관번호도 인증시 가져와서 db에 저장해야하나??
   
   var sql = "SELECT * FROM user WHERE id = ?"
   connection.query(sql,[userId], function(err , result){
@@ -32,7 +34,7 @@ router.post('/', function(req, res, next) {
                 "cntr_account_type": "N",
                 "cntr_account_num": "3521507517",
                 "dps_print_content": "쇼핑몰환불",
-                "fintech_use_num": fin_use_num,
+                "fintech_use_num": result[0].fin_usenum,
                 "wd_print_content": "오픈뱅킹출금",
                 "tran_amt": "1000",
                 "tran_dtime": "20200424131111",
@@ -59,6 +61,8 @@ router.post('/', function(req, res, next) {
           })
       }
     })
+
+    res.render('qrcode')
 
 });
  
