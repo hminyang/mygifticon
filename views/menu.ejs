@@ -85,8 +85,6 @@
 
     </div>
     <div style="display:none" id="store_key"><%=data[0].store_key%></div>
-<!-- JQuery library file. requared all pages -->
-<script src="js/jquery-3.2.1.min.js"></script>
 <script>
   var totalprice=0;
   total=document.querySelector("#total");
@@ -191,6 +189,7 @@ $("#buyBtn").click(function() {
             window.location.href = '/payment';
             alert("결제완료");
         }
+        
       });
 
       }else{
@@ -200,4 +199,30 @@ $("#buyBtn").click(function() {
 </script>
 
   </body>
+
+  <script>
+    $('#buy').click(function(){
+      var price = 10000;
+      var finUseNum = 'dsf';
+      $.ajax({
+                url:'/payment/withdraw',
+            type : 'POST',
+            headers : {
+               'ourtoken' : sessionStorage.getItem('jwtToken')
+            },
+                data : {
+               amount : price,
+               fin_use_num : finUseNum
+                },
+                success:function(data){
+                if(data == 1){
+                   alert('결재완료')
+                }
+                else {
+                  alert(data);
+                }
+                }
+            })     
+      });   
+  </script>
 </html>
