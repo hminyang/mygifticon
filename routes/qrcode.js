@@ -70,6 +70,7 @@ router.get('/scan', function (req, res)  {
   res.render('scanner');
 });
 
+// 현재는 다른 사업자가 발급한 기프티콘 사용 불가 처리 X
 // DB를 조회해서 해당 QR코드 값이 존재하면, 구성 상품 목록 리턴
 router.post('/scan', function (req, res)  {
   var qrcode = req.body.qrcode;
@@ -129,6 +130,9 @@ router.post('/scan', function (req, res)  {
 
 // 기프티콘 구성 상품 페이지 리턴
 router.get('/itemlist', function(req, res) {
+  var item_list = JSON.parse(req.query.item_list);
+  console.log(item_list);
+  res.render('itemlist', {data : item_list});
 });
 
 
