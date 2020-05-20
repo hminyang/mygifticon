@@ -9,8 +9,7 @@ router.post('/generate', function (req, res)  {
   var issued_date = new Date(); // 발행 시간은 서버의 현재 시간
   var expiry_date = new Date();
   expiry_date.setMonth(expiry_date.getMonth() + 1); // 기프티콘 유효기간은 1달
-  var item_list = req.body.item_list  // 메뉴의 key, cnt로 구성된 2차원 배열
-  var gifticon_key;
+  var item_list = req.body.item_list  // 메뉴의 menu_key, count로 구성된 2차원 배열
 
   getConnection((conn) => {
     // 기프티콘 저장
@@ -23,19 +22,23 @@ router.post('/generate', function (req, res)  {
           console.error(err);
         }
         else {
-          gifticon_key = result.insertId;
-        }
-      }
-    );
-
-    sql = "INSERT INT item_list (gifticon_key, menu_key, cnt) values ?";
-    // 해당 기프티콘에 해당되는 상품 목록 저장
-    conn.query(
-      sql,
-      [item_list],
-      function(err, result) {
-        if(err) {
-          console.error(err);
+          var gifticon_key = result.insertId;
+          
+          item_list.forEach(item => {
+            item['gifticon_key'] = gifticon_key;
+          });
+      
+          sql = "INSERT INT item_list (gifticon_key, menu_key, count) values ?";
+          // 해당 기프티콘에 해당되는 상품 목록 저장
+          conn.query(
+            sql,
+            [item_list],
+            function(err, result) {
+              if(err) {
+                console.error(err);
+              }
+            }
+          );
         }
       }
     );
