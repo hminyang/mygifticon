@@ -5,14 +5,11 @@ var getConnection = require('../lib/db');
 //기프티콘 qr코드 보여주기
 router.get('/',function(req,res){
   var gifticon_key= req.query.gifticon_key;
-  console.log(gifticon_key);
+  //console.log(gifticon_key);
   res.render('qrcode',{data:gifticon_key});
 })
 
-router.get('/',function(req,res){
-  //기프티콘 페이지
-  
-})
+
 
 // 기프티콘 DB에 추가 후 QR코드로 나타낼 값 리턴
 router.post('/generate', function (req, res)  {

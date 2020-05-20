@@ -6,7 +6,7 @@ var getConnection = require('../lib/db');
 router.get('/', function(req, res, next) {
   //console.log("req.query",req.query); //
   
-  var store_id= req.query.store_id;
+  var store_id= req.query.store_key;
     getConnection((conn) => {
         var sql = "SELECT * FROM fintech.menu where store_key=?";
         conn.query(
