@@ -25,12 +25,13 @@ app.use(cookieParser());
 
 
 app.get('/main', function(req, res){
-    res.render('main');
+  res.render('main');
 })
 
 app.get('/about', function(req, res){
     res.render('about');
 })
+
 
 /* /users 요청을 모두 /routes/index.js로 */
 app.use('/menu', menu);
