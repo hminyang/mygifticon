@@ -41,7 +41,7 @@
                 <div class="form-divider"></div>
                 <div class="form-row">
                     <button id="loginBtn" class="btn btn-primary">Login</button>&nbsp;&nbsp;
-                    <button id="loginBtn" class="btn btn-primary" href="/user/signup">Signup</button>
+                    <button id="signupBtn" class="btn btn-primary">Signup</button>
                 </div>
         
                 <!-- <div class="form-row txt-center mt-15">
@@ -55,6 +55,36 @@
         <br><br><br><br><br><br>
 
         <%- include('footer') %>
+        <script>
+          $('#signupBtn').click(function(){
+            window.location.href='/signup'
+          })
+          $('#loginBtn').click(function(){
+            var userId = $('#userId').val();
+            var userPassword = $('#userPassword').val();
+            $.ajax({
+                      url: "/user",
+                      type : 'POST',
+                      data:{
+                          userId : userId,
+                          userPassword : userPassword,
+                      },
+                      success: function(data){
+                        alert(data);
+                        if(data == '2'){
+                        alert("Password is not correct!!!");
+                        }
+                        else if(data == '3'){
+                          alert("there is no Id.");
+                        }
+                        else{
+                          sessionStorage.setItem('jwtToken',data);
+                          window.location.href='/menu'
+                        }
+                      }
+                    })
+          })
+        </script>
     </div>
 
 </html>

@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 
-app.use(logger('dev'));
+//app.use(logger('dev'));
 
 
 app.use(express.static(path.join(__dirname, 'public')));//to use static asset
@@ -25,6 +25,7 @@ const menu = require('./routes/menu');
 const user = require('./routes/user');
 const payment = require('./routes/payment');
 const qrcode = require('./routes/qrcode');
+const signup = require('./routes/signup');
 
 
 app.get('/main', function(req, res){
@@ -43,6 +44,8 @@ app.use('/user', user);
 app.use('/payment', payment);
 /* /users 요청을 모두 /routes/index.js로 */
 app.use('/qrcode', qrcode);
+/* /users 요청을 모두 /routes/index.js로 */
+app.use('/signup', signup);
 
 // 404 처리 미들웨어
 // app.use(function(req, res, next) {
