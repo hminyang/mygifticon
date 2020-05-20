@@ -48,11 +48,12 @@
                       <% for ( var i = 0; i < data.length; i++){ %>
                         <tr>
                           <td><%=data[i].name%></td>
-                          <td><%=data[i].price%></td>
+                          <td class="price"><%=data[i].price%></td>
                           <td>
-                            <input type="text" size="3"></input>
-                            <button  type="button" class="btn btn-primary">+</button>
-                            <button  type="button" class="btn btn-primary">-</button>
+                            <div style="display:none"><%=data[i].menu_key%></div>
+                            <input type="text" size="3" value="0"></input>
+                            <button  type="button" class="btn btn-primary plusbtn">+</button>
+                            <button type="button" class="btn btn-primary minusbtn">-</button>
                           </td>
                         </tr>
                       <% } %>
@@ -66,9 +67,9 @@
                   <tr class="table-primary">
                     <td scope="row">총 금액</td>
                     <td>  </td>
-                    <td class="align-right">10000원
+                    <td  class="align-right"><span id="total">0</span>원
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <button  type="button" class="btn btn-warning">구매하기</button>
+                      <button id="buyBtn" type="button" class="btn btn-warning">구매하기</button>
                     </td>
                   </tr>
                 </tfoot>
@@ -84,5 +85,89 @@
 
 
     </div>
+    <div style="display:none" id="store_key"><%=data[0].store_key%></div>
+<!-- JQuery library file. requared all pages -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+  var totalprice=0;
+  total=document.querySelector("#total");
+  console.log(total.innerText);
+  const itemlist=[];//menu_key 랑 count
+$(".plusbtn").click(function(){
+        
+        const btn =event.target; //event.target 이벤트를 발생시킨 애
+        const price =btn.parentNode.parentNode.querySelector(".price").innerText;
+        
+        totalprice+=Number(price);
+       
+        total.innerText=totalprice;
+        const count=btn.parentNode.querySelector("input").value;
+        
+        btn.parentNode.querySelector("input").value=Number(count)+1;
+        
+        const menu_key=btn.parentNode.querySelector("div").textContent;
+        if (itemlist.length==0){
+          const menu={
+                menu_key:menu_key,
+                count: 1
+              };
+              itemlist.push(menu);
+
+        }
+        else{
+          itemlist.forEach((item) => {
+            if(item.menu_key==menu_key){
+
+              item.count++;
+            }
+            else{
+              const menu={
+                menu_key:menu_key,
+                count: 1
+              };
+              itemlist.push(menu);
+            }
+          });
+       }
+        console.log("itemlist",itemlist)
+})
+
+$(".minusbtn").click(function(){
+        
+        const btn =event.target; //event.target 이벤트를 발생시킨 애
+         const price =btn.parentNode.parentNode.querySelector(".price").innerText;
+         totalprice-=Number(price);
+         total.innerText=totalprice;
+        const count=btn.parentNode.querySelector("input").value;
+        
+        btn.parentNode.querySelector("input").value=Number(count)-1;
+})
+
+$("#buyBtn").click(function() {
+      //var inputData=$("#inputData").val(); 
+    
+      var priceData=total.innerText;
+      var store_key=document.getElementById("store_key").textContent;
+      console.log(priceData);
+      console.log(store_key);
+      console.log(JSON.stringify(itemlist));
+
+      $.ajax({
+        url: "/payment",
+        type: 'POST',
+        data: {
+          price : priceData,
+          store_key : store_key,
+          user_key : "7",
+          item_list : JSON.stringify(itemlist),
+        },
+        success: function(result) {
+            alert(result);
+        }
+      });
+    })
+
+</script>
+
   </body>
 </html>
