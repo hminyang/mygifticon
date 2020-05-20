@@ -165,6 +165,8 @@ $("#buyBtn").click(function() {
       console.log(JSON.stringify(itemlist));
 
       $.ajax({
+
+        //결제 요청
         url: "/payment",
         type: 'POST',
         data: {
@@ -173,8 +175,10 @@ $("#buyBtn").click(function() {
           user_key : "7",
           item_list : JSON.stringify(itemlist),
         },
+        //성공시 기프티콘 페이지로 이동 
         success: function(result) {
             alert(result);
+            window.location.href=`/qrcode?gitfticon_key=${result}`;
         }
       });
     })
