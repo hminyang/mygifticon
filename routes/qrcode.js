@@ -3,6 +3,11 @@ var express = require('express');
 var router = express.Router();
 var getConnection = require('../lib/db');
 
+router.get('/',function(req,res){
+  //기프티콘 페이지
+  
+})
+
 // 기프티콘 DB에 추가 후 QR코드로 나타낼 값 리턴
 router.post('/generate', function (req, res)  {
   var store_key = req.body.store_key;
