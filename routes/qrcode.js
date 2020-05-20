@@ -1,3 +1,4 @@
+const mysql = require('mysql');
 var express = require('express');
 var router = express.Router();
 var getConnection = require('../lib/db');
@@ -28,26 +29,33 @@ router.post('/generate', function (req, res)  {
             item['gifticon_key'] = gifticon_key;
           });
       
-          sql = "INSERT INT item_list (gifticon_key, menu_key, count) values ?";
+          var sql = "INSERT INTO item_list (gifticon_key, menu_key, count) VALUES ?";
+          var params = [];
+          
+          item_list.forEach(item => {
+              var arr = [];
+              arr.push(item.gifticon_key);
+              arr.push(item.menu_key);
+              arr.push(item.count);
+              params.push(arr);
+          })
           // 해당 기프티콘에 해당되는 상품 목록 저장
           conn.query(
             sql,
-            [item_list],
+            [params],
             function(err, result) {
               if(err) {
                 console.error(err);
+              } else {
+                res.json({gifticon_key});
               }
             }
           );
         }
       }
     );
-
     conn.release();
   });
-
-  // 생성된 기프티콘 키값 리턴
-  return gifticon_key;
 });
 
 
@@ -66,53 +74,57 @@ router.get('/scan', function (req, res)  {
 router.post('/scan', function (req, res)  {
   var qrcode = req.body.qrcode;
 
-  var sql = "SELECT FROM gifticon WHERE gifticon_key = ?";
-  conn.query(
-    sql,
-    [qrcode],
-    function(err, result) {
-      if(err) {
-        console.error(err);
-      }
-      else {
-        if(result.length === 0) {
-          res.json({'status' : 0,
-                    'msg' : '존재하지 않는 기프티콘 입니다.'});
-          return;
+  getConnection((conn) => {
+    var sql = "SELECT * FROM gifticon WHERE gifticon_key = ?";
+    conn.query(
+      sql,
+      [qrcode],
+      function(err, result) {
+        if(err) {
+          console.error(err);
         }
-        
-        // 서버 현재 시간을 기준으로 사용기한이 지난 경우
-        var expiry_date = JSON.parse(JSON.stringify(result[0]))['expiry_date'];
-        if(new Date(expiry_date) < new Date()) {
-            res.json({'status' : 0,
-                      'msg' : '사용 기한이 만료되었습니다.'});
-        }
-        // 이미 사용된 기프티콘
-        else if(result[0]['used_date'] !== null) {
-          res.json({'status' : 0,
-                    'msg' : '이미 사용된 기프티콘 입니다.'});
-        }
-        // 기프티콘 구성 상품 목록 조회 후 리턴
         else {
-          sql = "SELECT * FROM item_list, menu WHERE gifticon_key = ? and item_list.menu_key = menu.menu_key";
-          conn.query(sql, [result[0]['gifticon_key']], function(err, result2) {
-            if(err) {
-              console.error(err);
-            } else {
-              var arr = []
-
-              result2.forEach(item => {
-                arr.push({'name' : item['name'], 'count' : item['count']});
-              })
-
-              res.json({'status' : 1,
-                        'item_list' : arr});
-            }
-          })  // end of inner query
+          if(result.length === 0) {
+            res.json({'status' : 0,
+                      'msg' : '존재하지 않는 기프티콘 입니다.'});
+            return;
+          }
+          
+          // 서버 현재 시간을 기준으로 사용기한이 지난 경우
+          var expiry_date = JSON.parse(JSON.stringify(result[0]))['expiry_date'];
+          if(new Date(expiry_date) < new Date()) {
+              res.json({'status' : 0,
+                        'msg' : '사용 기한이 만료되었습니다.'});
+          }
+          // 이미 사용된 기프티콘
+          else if(result[0]['used_date'] !== null) {
+            res.json({'status' : 0,
+                      'msg' : '이미 사용된 기프티콘 입니다.'});
+          }
+          // 기프티콘 구성 상품 목록 조회 후 리턴
+          else {
+            sql = "SELECT * FROM item_list, menu WHERE gifticon_key = ? and item_list.menu_key = menu.menu_key";
+            conn.query(sql, [result[0]['gifticon_key']], function(err, result2) {
+              if(err) {
+                console.error(err);
+              } else {
+                var arr = []
+  
+                result2.forEach(item => {
+                  arr.push({'name' : item['name'], 'count' : item['count']});
+                })
+  
+                res.json({'status' : 1,
+                          'item_list' : arr});
+              }
+            })  // end of inner query
+          }
         }
-      }
-    } // end of callback of outer query
-  ); // end of outer query
+      } // end of callback of outer query
+    ); // end of outer query
+
+    conn.release();
+  })
 });
 
 // 기프티콘 구성 상품 페이지 리턴
