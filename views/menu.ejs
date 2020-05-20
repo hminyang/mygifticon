@@ -22,7 +22,7 @@
             </div>
             <div class="bs-component">
               <div class="alert alert-dismissible alert-light">
-                <h2 class="card-title text-center">★★Cafe</h2> 
+                <h2 class="card-title text-center"><span id="store_name">★★Cafe</span></h2> 
               </div>
             </div>
           </div>
@@ -105,10 +105,13 @@ $(".plusbtn").click(function(){
         btn.parentNode.querySelector("input").value=Number(count)+1;
         
         const menu_key=btn.parentNode.querySelector("div").textContent;
+        var menu_name = btn.parentNode.parentNode.getElementsByTagName("td")[0].textContent;
+
         if (itemlist.length==0){
           const menu={
                 menu_key:menu_key,
-                count: 1
+                count: 1,
+                name: menu_name
               };
               itemlist.push(menu);
 
@@ -122,7 +125,8 @@ $(".plusbtn").click(function(){
             else{
               const menu={
                 menu_key:menu_key,
-                count: 1
+                count: 1,
+                name: menu_name
               };
               itemlist.push(menu);
             }
@@ -156,27 +160,41 @@ $(".minusbtn").click(function(){
 })
 
 $("#buyBtn").click(function() {
-      //var inputData=$("#inputData").val(); 
-    
       var priceData=total.innerText;
       var store_key=document.getElementById("store_key").textContent;
-      console.log(priceData);
-      console.log(store_key);
-      console.log(JSON.stringify(itemlist));
+      var store_name =document.getElementById("store_name").textContent;
+      var confirm_msg = store_name+"에서 ";
 
-      $.ajax({
+      for(var i=0;i<itemlist.length;i++) {
+        confirm_msg += itemlist[i].name;
+        confirm_msg += "(";
+        confirm_msg += itemlist[i].count;
+        confirm_msg += ")"
+        if(i!=itemlist.length-1) confirm_msg += ","
+      }
+
+      confirm_msg += " 으로 구성된 기프티콘을 구매합니다.\n"+priceData+"원을 이체하시겠습니까?";
+      var confirmflag = confirm(confirm_msg);
+      
+      if(confirmflag){
+        $.ajax({
         url: "/payment",
         type: 'POST',
         data: {
+          step : "buy",
           price : priceData,
           store_key : store_key,
           user_key : "7",
           item_list : JSON.stringify(itemlist),
         },
         success: function(result) {
-            alert(result);
+            window.location.href = '/payment';
+            alert("결제완료");
         }
       });
+
+      }else{
+      }
     })
 
 </script>
