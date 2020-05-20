@@ -111,10 +111,17 @@
               type : 'POST',
               data : {
                   amount : totalamt,
+                  store_key : 5
               },
               success:function(data){
-                      alert(totalamt);
-                      window.location.href = '/payment'
+                      //console.log(data);
+                      var confirmflag = confirm(totalamt+"원을 이체하시겠습니까?");
+                            if(confirmflag){
+                              window.location.href = '/payment';
+                              //상균님 generate 로 가야함
+                            }else{
+
+                            }
               }
             })
           })

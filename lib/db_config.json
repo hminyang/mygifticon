@@ -1,6 +1,6 @@
 
 {
-    "host": "192.168.40.193",
+    "host": "172.16.101.214",
     "user": "fintech",
     "password": "1q2w3e4r!",
     "database": "fintech",
