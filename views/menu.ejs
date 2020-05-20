@@ -140,6 +140,19 @@ $(".minusbtn").click(function(){
         const count=btn.parentNode.querySelector("input").value;
         
         btn.parentNode.querySelector("input").value=Number(count)-1;
+
+        
+        const menu_key=btn.parentNode.querySelector("div").textContent;
+        
+          itemlist.forEach((item) => {
+            if(item.menu_key==menu_key){
+
+              item.count--;
+            }
+            
+          });
+       
+        console.log("itemlist",itemlist)
 })
 
 $("#buyBtn").click(function() {

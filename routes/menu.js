@@ -4,7 +4,7 @@ var getConnection = require('../lib/db');
  
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log("req.query",req.query); //
+  //console.log("req.query",req.query); //
   
   var store_id= req.query.store_id;
     getConnection((conn) => {
@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
                 throw err;
             }
             else {
-              console.log(result[0].menu_key);
+              //console.log(result[0].menu_key);
               
               res.render('menu',{data:result} )
             }
