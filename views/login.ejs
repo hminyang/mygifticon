@@ -70,7 +70,7 @@
                           userPassword : userPassword,
                       },
                       success: function(data){
-                        alert(data);
+                        //alert(data);
                         if(data == '2'){
                         alert("Password is not correct!!!");
                         }
@@ -79,7 +79,7 @@
                         }
                         else{
                           sessionStorage.setItem('jwtToken',data);
-                          window.location.href='/menu'
+                          window.location.href='/menu?store_key=5'
                         }
                       }
                     })
