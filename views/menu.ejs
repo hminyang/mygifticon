@@ -75,9 +75,13 @@
                   <tr class="table-primary">
                     <td scope="row">총 금액</td>
                     <td>  </td>
-                    <td class="align-right">10000원
+                    <td id="totalamt" class="align-right">10000원
                       &nbsp;&nbsp;&nbsp;&nbsp;
+<<<<<<< HEAD
                       <button  type="button" class="btn btn-warning" id="buy">구매하기</button>
+=======
+                      <button id="buyBtn" type="button" class="btn btn-warning">구매하기</button>
+>>>>>>> e59a18fd3dc4bfaa257f3c5ebc2597fa1d4fc7a4
                     </td>
                   </tr>
                 </tfoot>
@@ -91,8 +95,35 @@
 
       </footer>
 
-
     </div>
+
+
+        <!-- JQuery library file. requared all pages -->
+        <script src="js/jquery-3.2.1.min.js"></script>
+
+        <!-- Template global script file. requared all pages -->
+        <script src="js/global.script.js"></script>
+
+        <script>
+          $("#buyBtn").click(function(){
+            var totalamt = 10000;
+            //$('#totalamt').text(); 이렇게 해서 받아오고싶은뎅
+            console.log(totalamt);
+
+            $.ajax({
+              url:'/payment',
+              type : 'POST',
+              data : {
+                  amount : totalamt,
+              },
+              success:function(data){
+                      alert(totalamt);
+                      window.location.href = '/payment'
+              }
+            })
+          })
+      </script>
+
   </body>
 
   <script>
