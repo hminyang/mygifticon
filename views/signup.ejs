@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <%- include('header') %>
+  <div class="container">
+    <div class="page-header" id="banner">
+      <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+          <p class="lead"></p>
+          <br>
+        </div>
+      </div>
+    </div>
+    
+      <div class="bs-docs-section clearfix">
+        <div class="row">
+          <div class="col-lg-12">
+              <br><br><br><br><br><br>
+            <div class="page-header">
+              <h1 id="login">Signup</h1>
+            </div>
+
+            <div class="container">
+                <div class="form-divider"></div>
+        
+                <div class="form-row-group with-icons">
+                    <div class="form-row no-padding">
+                        <i class="fa fa-user"></i>
+                        <input type="text" id="userName" class="form-element" placeholder="Username" value="">
+                    </div>
+                    <div class="form-row no-padding">
+                        <i class="fa fa-lock"></i>
+                        <input type="text" class="form-control" id="userId" placeholder="userId" value="">
+                    </div>
+                    <div class="form-row no-padding">
+                        <i class="fa fa-lock"></i>
+                        <input type="password" class="form-control" id="userPassword" placeholder="Password" value="">
+                    </div>
+                    <div class="form-row no-padding">
+                        <i class="fa fa-user"></i>
+                        <input type="text" id="userAccessToken" class="form-control" placeholder="accessToken" value="">
+                    </div>
+                    <div class="form-row no-padding">
+                        <i class="fa fa-user"></i>
+                        <input type="text" id="userRefreshToken" class="form-control" placeholder="refreshToken" value="">
+                    </div>
+                    <div class="form-row no-padding">
+                        <i class="fa fa-user"></i>
+                        <input type="text" id="userSeqNo" class="form-control" placeholder="userseqno" value="">
+                    </div>
+                </div>
+                <div class="form-divider"></div>
+                <div class="form-row">
+                    <button id="authBtn" class="btn btn-primary"> <i class="fa fa-user"></i> 인증받기</button>
+                </div>
+                <div class="form-row">
+                    <button id="signupBtn" class="btn btn-primary">Sign Up</button>
+                </div>
+                <div class="form-row txt-center mt-15">
+                    Already have an account? <a href="/login" data-loader="show">Login</a>
+                </div>
+        
+            </div>
+          </div>
+        </div>
+
+        <br><br><br><br><br><br>
+
+    </div>
+    <%- include('footer') %>
+  
+    <script>
+      $('#authBtn').click(function(){
+        var tmpWindow = window.open('about:blank')
+        tmpWindow.location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=fn8HtLolk7Xmy60buPvw67PlHk65TeQ4g3BJfZaL&redirect_uri=/user/authResult&scope=login inquiry transfer&state=12345678901234567890123456789012&auth_type=0"
+      })
+
+      $('#signupBtn').click(function(){
+            var userName = $("#userName").val();
+            var userEmail = $("#userId").val();
+            var userPassword = $("#userPassword").val();
+            var userAccessToken = $("#userAccessToken").val();
+            var userRefreshToken = $("#userRefreshToken").val();
+			var userSeqNo = $("#userSeqNo").val();
+			console.log(userName);
+            $.ajax({
+                url: "/signup",
+                type : 'POST',
+                data:{
+                    userName : userName,
+                    userId : userId,
+                    userPassword : userPassword,
+                    userAccessToken : userAccessToken,
+                    userRefreshToken : userRefreshToken,
+                    userSeqNo : userSeqNo
+                },
+                success: function(responseResult){
+					console.log(responseResult);
+					if(responseResult == '1'){
+					alert("signup success!!!");
+					}
+					else{
+						alert("failure....");
+					}
+                 }
+            })
+        })
+    </script>
+</html>
+

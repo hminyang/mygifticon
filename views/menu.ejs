@@ -97,8 +97,27 @@
 
   <script>
     $('#buy').click(function(){
-            var tmpWindow = window.open('about:blank')
-            tmpWindow.location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=fn8HtLolk7Xmy60buPvw67PlHk65TeQ4g3BJfZaL&redirect_uri=http://localhost:3000/authResult&scope=login inquiry transfer&state=12345678901234567890123456789012&auth_type=0"
-        })
+      var price = 10000;
+      var finUseNum = 'dsf';
+      $.ajax({
+                url:'/payment/withdraw',
+            type : 'POST',
+            headers : {
+               'ourtoken' : sessionStorage.getItem('jwtToken')
+            },
+                data : {
+               amount : price,
+               fin_use_num : finUseNum
+                },
+                success:function(data){
+                if(data == 1){
+                   alert('결재완료')
+                }
+                else {
+                  alert(data);
+                }
+                }
+            })     
+      });   
   </script>
 </html>

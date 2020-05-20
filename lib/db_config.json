@@ -1,0 +1,8 @@
+
+{
+    "host": "192.168.40.193",
+    "user": "fintech",
+    "password": "1q2w3e4r!",
+    "database": "fintech",
+    "connectionLimit": 30
+  }
