@@ -46,15 +46,19 @@
                     <% if(data != null && data.length > 0){ %>
                       
                       <% for ( var i = 0; i < data.length; i++){ %>
+                        
                         <tr>
                           <td><%=data[i].name%></td>
-                          <td class="price"><%=data[i].price%></td>
-                          <td>
+                          <td text-align="center" valign="middle" rowspan="2" class="price"><%=data[i].price%></td>
+                          <td valign="middle" rowspan="2" text-align="center">
                             <div style="display:none"><%=data[i].menu_key%></div>
                             <input type="text" size="3" value="0"></input>
                             <button  type="button" class="btn btn-primary plusbtn">+</button>
                             <button type="button" class="btn btn-primary minusbtn">-</button>
                           </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-top: 0px; padding-bottom: 0px; font-size:10px;"><%=data[i].description%></td>
                         </tr>
                       <% } %>
                     <% } %>
