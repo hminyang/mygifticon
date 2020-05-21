@@ -5,16 +5,16 @@ var getConnection = require('../lib/db');
 //기프티콘 qr코드 보여주기
 router.get('/',function(req,res){
   var gifticon_key= req.query.gifticon_key;
-  //console.log(gifticon_key);
+  console.log(gifticon_key);
   res.render('qrcode',{data:gifticon_key});
 })
 
-
-
 // 기프티콘 DB에 추가 후 QR코드로 나타낼 값 리턴
 router.post('/generate', function (req, res)  {
+  console.log(req.body)
+
   var store_key = req.body.store_key;
-  var owner = req.body.owner;
+  var owner = req.body.user_key;
   var issued_date = new Date(); // 발행 시간은 서버의 현재 시간
   var expiry_date = new Date();
   expiry_date.setMonth(expiry_date.getMonth() + 1); // 기프티콘 유효기간은 1달
@@ -40,14 +40,15 @@ router.post('/generate', function (req, res)  {
       
           var sql = "INSERT INTO item_list (gifticon_key, menu_key, count) VALUES ?";
           var params = [];
-          
+
           item_list.forEach(item => {
-              var arr = [];
-              arr.push(item.gifticon_key);
-              arr.push(item.menu_key);
-              arr.push(item.count);
-              params.push(arr);
-          })
+            var arr = [];
+            arr.push(item.gifticon_key);
+            arr.push(item.menu_key);
+            arr.push(item.count);
+            params.push(arr);
+        })
+
           // 해당 기프티콘에 해당되는 상품 목록 저장
           conn.query(
             sql,
@@ -118,6 +119,7 @@ router.post('/scan', function (req, res)  {
               if(err) {
                 console.error(err);
               } else {
+                var price = result[0]['price'];
                 var arr = []
   
                 result2.forEach(item => {
@@ -125,9 +127,15 @@ router.post('/scan', function (req, res)  {
                 })
   
                 res.json({'status' : 1,
+<<<<<<< HEAD
+                          'item_list' : arr,
+                          'price' : price,
+                          'gifticon_key': gifticon_key});
+=======
                           'price' : result[0]['price'],
                           'gifticon_key' : qrcode,
                           'item_list' : arr});
+>>>>>>> 400dc81c4d01bd4cdece4f8b23f8681ffecb6c9e
               }
             })  // end of inner query
           }

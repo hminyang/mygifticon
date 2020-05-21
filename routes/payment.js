@@ -3,9 +3,9 @@ const request = require('request')
 var router = express.Router();
 var getConnection = require('../lib/db');
 
-router.get('/', function(req, res){
-    res.render('qrcode');
-})
+// router.get('/generate', function(req, res){
+//     res.render('qrcode');
+// })
 
 router.post('/', function(req, res, next) {
 
@@ -16,8 +16,7 @@ router.post('/', function(req, res, next) {
         //var userId = req.decoded.userId;
         var user_key = req.body.user_key; //test용
         var tran_amt = req.body.price;
-        var store_key = req.body.store_key;
-        var item_list = req.body.item_list;
+        var store_name = req.body.store_name;
         
         var countnum = Math.floor(Math.random() * 1000000000) + 1;
         var transId = "T991628950U" + countnum; //이용기관번호 테스트배드 하나로 고정
@@ -46,7 +45,7 @@ router.post('/', function(req, res, next) {
                     throw err;
                 }
                 else {
-                    console.log(result);
+                    //console.log(result);
 
                     var option = {
                         method : "POST",
@@ -60,8 +59,8 @@ router.post('/', function(req, res, next) {
                         "cntr_account_type": "N",
                         //관리자 계좌
                         "cntr_account_num": "3521507517",
-                        //사업체 key값
-                        "dps_print_content": store_key,
+                        //사업체 name값
+                        "dps_print_content": store_name,
                         "fintech_use_num": result[0].fin_usenum,
                         "tran_amt": tran_amt,
                         "tran_dtime": tran_dtime,
@@ -78,33 +77,33 @@ router.post('/', function(req, res, next) {
 
                     request(option, function(err, response, body){
                         //console.log(option)
-                        console.log(body);
+                        //console.log(body);
                         if(err){
                             console.error(err);
                             throw err;
                         }
-                        else {
-                            if(body.rsp_code == 'A0000'){
-                                
-                                res.json(1);
-                            }
-                        }
+                        else{
+                            console.log(body)
+                            //console.log(body.tran_amt)
+
+                            res.json({
+                                    'bank_name': body.bank_name,
+                                    'account_num_masked': body.account_num_masked,
+                                    'tran_amt': body.tran_amt,
+                                    'wd_limit_remain_amt': body.wd_limit_remain_amt});
+                                }
                     })
-                    
                 }
-            }
-            );
             conn.release();
         });
-    }
+    });
+}
 
     //use gifticon
     else{
-        //var userId = req.decoded.userId;
-        
         var tran_amt = req.body.price;
-        var store_key = req.body.store_key;
-        var item_list = req.body.item_list;
+        //사업자가 user
+        var user_key = req.body.user_key;
         
         var countnum = Math.floor(Math.random() * 1000000000) + 1;
         var transId = "T991628950U" + countnum; //이용기관번호 테스트배드 하나로 고정
@@ -145,15 +144,14 @@ router.post('/', function(req, res, next) {
                         json : {
                         "bank_tran_id" : transId,
                         "cntr_account_type": "N",
-                        //관리자 계좌
+                        //사업자(user) 계좌
                         "cntr_account_num": "3521507517",
-                        //사업체 key값
-                        "dps_print_content": store_key,
+                        "dps_print_content": "기프티콘 사용처리",
                         "fintech_use_num": result[0].fin_usenum,
                         "tran_amt": tran_amt,
                         "tran_dtime": tran_dtime,
-                        //사용자명
-                        "req_client_name": result[0].name,
+                        //관리자
+                        "req_client_name": "MYGIFTICON",
                         "req_client_fintech_use_num": result[0].fin_usenum,
                         "req_client_num": "HONGGILDONG1234",
                         "transfer_purpose": "TR",
