@@ -5,27 +5,30 @@ var getConnection = require('../lib/db');
 //기프티콘 qr코드 보여주기
 router.get('/',function(req,res){
   var gifticon_key= req.query.gifticon_key;
-  //console.log(gifticon_key);
+  console.log(gifticon_key);
   res.render('qrcode',{data:gifticon_key});
 })
 
-
-
 // 기프티콘 DB에 추가 후 QR코드로 나타낼 값 리턴
 router.post('/generate', function (req, res)  {
+  console.log(req.body)
+
   var store_key = req.body.store_key;
-  var owner = req.body.owner;
+  var owner = req.body.user_key;
   var issued_date = new Date(); // 발행 시간은 서버의 현재 시간
   var expiry_date = new Date();
   expiry_date.setMonth(expiry_date.getMonth() + 1); // 기프티콘 유효기간은 1달
-  var item_list = req.body.item_list  // 메뉴의 menu_key, count로 구성된 2차원 배열
+  var item_list = JSON.parse(req.body.item_list); // 메뉴의 menu_key, count로 구성된 2차원 배열
+  var price = req.body.price;
+
+  console.log(item_list)
 
   getConnection((conn) => {
     // 기프티콘 저장
-    var sql = "INSERT INTO gifticon (store_key, owner, expiry_date, issued_date) VALUES (?,?,?,?)";
+    var sql = "INSERT INTO gifticon (store_key, owner, expiry_date, issued_date, price) VALUES (?,?,?,?,?)";
     conn.query(
       sql,
-      [store_key, owner, expiry_date, issued_date],
+      [store_key, owner, expiry_date, issued_date, price],
       function(err, result) {
         if(err) {
           console.error(err);
@@ -39,14 +42,15 @@ router.post('/generate', function (req, res)  {
       
           var sql = "INSERT INTO item_list (gifticon_key, menu_key, count) VALUES ?";
           var params = [];
-          
+
           item_list.forEach(item => {
-              var arr = [];
-              arr.push(item.gifticon_key);
-              arr.push(item.menu_key);
-              arr.push(item.count);
-              params.push(arr);
-          })
+            var arr = [];
+            arr.push(item.gifticon_key);
+            arr.push(item.menu_key);
+            arr.push(item.count);
+            params.push(arr);
+        })
+
           // 해당 기프티콘에 해당되는 상품 목록 저장
           conn.query(
             sql,
@@ -117,6 +121,7 @@ router.post('/scan', function (req, res)  {
               if(err) {
                 console.error(err);
               } else {
+                var price = result[0]['price'];
                 var arr = []
   
                 result2.forEach(item => {
@@ -124,7 +129,9 @@ router.post('/scan', function (req, res)  {
                 })
   
                 res.json({'status' : 1,
-                          'item_list' : arr});
+                          'item_list' : arr,
+                          'price' : price,
+                          'gifticon_key': gifticon_key});
               }
             })  // end of inner query
           }

@@ -24,7 +24,7 @@
             <div class="bs-component">
               <br>
               <div class="jumbotron">
-                <p class="display-3">This is QRcode Test Page!</p>
+                <p class="display-3">나만의 기프티콘이 생성되었습니다!</p>
                 </p>
                 <div id="qrcode"></div>
               </div>
@@ -39,10 +39,11 @@
     </div>
     <div style="display:none" id="gifticon_key"><%=data%></div>
     <!-- JQuery library file. requared all pages -->
-<script src="js/jquery-3.2.1.min.js"></script>
-<!-- Template global script file. requared all pages -->
-<script src="js/qrcode.js"> </script>
-<script src="js/global.script.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Template global script file. requared all pages -->
+    <script type="text/javascript" src="http://localhost:3000/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="http://localhost:3000/js/instascan.min.js"></script>
+    <script src="js/qrcode.js"> </script>
 <script>
   
   var gifticon_key=document.getElementById("gifticon_key").textContent;

@@ -85,6 +85,7 @@
 
     </div>
     <div style="display:none" id="store_key"><%=data[0].store_key%></div>
+
 <script>
   var totalprice=0;
   total=document.querySelector("#total");
@@ -105,7 +106,9 @@ $(".plusbtn").click(function(){
         const menu_key=btn.parentNode.querySelector("div").textContent;
         var menu_name = btn.parentNode.parentNode.getElementsByTagName("td")[0].textContent;
 
-        if (itemlist.length==0){
+        var listlen = itemlist.length;
+        if (listlen==0){
+          console.log("nothing in it")
           const menu={
                 menu_key:menu_key,
                 count: 1,
@@ -115,22 +118,26 @@ $(".plusbtn").click(function(){
 
         }
         else{
-          itemlist.forEach((item) => {
-            if(item.menu_key==menu_key){
 
-              item.count++;
+          for(var k =0;k<listlen;k++){
+            var item = itemlist[k];
+            if(item.menu_key==menu_key){
+                console.log("already here")
+                item.count++;
+                break;
             }
-            else{
-              const menu={
-                menu_key:menu_key,
-                count: 1,
-                name: menu_name
-              };
-              itemlist.push(menu);
+
+            else if(k == listlen-1){
+              console.log("new menu")
+                const menu={
+                  menu_key:menu_key,
+                  count: 1,
+                  name: menu_name
+                };
+                itemlist.push(menu);
             }
-          });
-       }
-        console.log("itemlist",itemlist)
+          }
+        }
 })
 
 $(".minusbtn").click(function(){
@@ -150,6 +157,11 @@ $(".minusbtn").click(function(){
             if(item.menu_key==menu_key){
 
               item.count--;
+
+              if(item.count==0){
+                var idx = itemlist.indexOf(item);
+                itemlist.splice(idx, 1)
+              }
             }
             
           });
@@ -181,17 +193,36 @@ $("#buyBtn").click(function() {
         data: {
           step : "buy",
           price : priceData,
-          store_key : store_key,
-          user_key : "7",
-          item_list : JSON.stringify(itemlist),
+          store_name : store_name,
+          //여기서는 구매자가 user
+          user_key : "7"
         },
         success: function(result) {
-            window.location.href = '/payment';
-            alert("결제완료");
-        }
-        
-      });
+            //console.log(result["tran_amt"])
+            alert("["+result.bank_name+"] "
+            +result.account_num_masked+"\n"
+            +result.tran_amt+"원 결제완료\n"
+            +"잔액: "+result.wd_limit_remain_amt);
 
+            //post to qrcode/generate
+            $.ajax({
+                url: "/qrcode/generate",
+                type: 'POST',
+                data: {
+                  store_key : store_key,
+                  user_key : "7",
+                  price : priceData,
+                  item_list : JSON.stringify(itemlist)
+                },
+                
+                success: function(result) {
+                  console.log(result.gifticon_key)
+                  window.location.href="http://localhost:3000/qrcode?gifticon_key="+result.gifticon_key;
+                }
+
+            });
+        }
+      });
       }else{
       }
     })
@@ -199,30 +230,4 @@ $("#buyBtn").click(function() {
 </script>
 
   </body>
-
-  <script>
-    $('#buy').click(function(){
-      var price = 10000;
-      var finUseNum = 'dsf';
-      $.ajax({
-                url:'/payment/withdraw',
-            type : 'POST',
-            headers : {
-               'ourtoken' : sessionStorage.getItem('jwtToken')
-            },
-                data : {
-               amount : price,
-               fin_use_num : finUseNum
-                },
-                success:function(data){
-                if(data == 1){
-                   alert('결재완료')
-                }
-                else {
-                  alert(data);
-                }
-                }
-            })     
-      });   
-  </script>
 </html>
