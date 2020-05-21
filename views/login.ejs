@@ -77,8 +77,10 @@
                           alert("there is no Id.");
                         }
                         else{
+                          
                           sessionStorage.setItem('jwtToken',data.jwt);
                           sessionStorage.setItem('userId',data.userId);
+                          sessionStorage.setItem('user_key',data.user_key);
                           sessionStorage.setItem('fin_usenum',data.fin_usenum);
                           sessionStorage.setItem('authorization',data.authorization);
                           sessionStorage.setItem('accessToken',data.accessToken);
