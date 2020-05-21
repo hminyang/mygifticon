@@ -50,6 +50,7 @@ router.post('/', function(req, res){
                             console.log('로그인 성공', token);
                             var info = {
                                 jwt : token,
+                                user_key: result[0].user_key,
                                 userId : result[0].id,
                                 fin_usenum : result[0].fin_usenum,
                                 authorization : result[0].authorization,
