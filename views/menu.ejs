@@ -185,6 +185,7 @@ $("#buyBtn").click(function() {
 
       confirm_msg += " 으로 구성된 기프티콘을 구매합니다.\n"+priceData+"원을 이체하시겠습니까?";
       var confirmflag = confirm(confirm_msg);
+      const user_key=sessionStorage.getItem('user_key');
       
       if(confirmflag){
         $.ajax({
@@ -193,9 +194,15 @@ $("#buyBtn").click(function() {
         data: {
           step : "buy",
           price : priceData,
+<<<<<<< HEAD
           store_name : store_name,
           //여기서는 구매자가 user
           user_key : "7"
+=======
+          store_key : store_key,
+          user_key : user_key,
+          item_list : JSON.stringify(itemlist),
+>>>>>>> fec810ead9751d5bb833edf1373000ecf2faf0f7
         },
         success: function(result) {
             //console.log(result["tran_amt"])

@@ -77,14 +77,16 @@
                           alert("there is no Id.");
                         }
                         else{
+                          
                           sessionStorage.setItem('jwtToken',data.jwt);
                           sessionStorage.setItem('userId',data.userId);
+                          sessionStorage.setItem('user_key',data.user_key);
                           sessionStorage.setItem('fin_usenum',data.fin_usenum);
                           sessionStorage.setItem('authorization',data.authorization);
                           sessionStorage.setItem('accessToken',data.accessToken);
 
                           if (data.authorization == 2){
-                            window.location.href='/menu?store_key=5&name=핀테크카페'
+                            window.location.href='/store'
                           }
                           else if (data.authorization == 1) {
                             window.location.href = '/qrcode/scan'
