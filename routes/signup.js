@@ -59,69 +59,37 @@ router.get('/authResult', function(req, res){
                 "권한(사업자1/일반2) : "+ authorization + "\n" +
                 "finUseNum : " + finUseNum + " (계좌정보 받아오기 전)" );
     
-    var option = {
-        method : "GET",
-        url : "https://testapi.openbanking.or.kr/v2.0/user/me",
-        headers : {
-            Authorization : 'Bearer ' + userAccessToken,
-        },
-        data : {
-            user_seq_no : userSeqNo,
-        }
-    }
     
-    request(option, function(err, res, body){
-        console.log('UserSeqNo, AccessToken으로 계좌조회!!!!!')
-        console.log("option ==> "+JSON.stringify(option));
-        console.log("API 요청 결과 : " + body);
-        if(err){
-            console.error(err);
-            throw err;
-        }
-        else {
-            console.log("rsp_code == 'A0000'이면 계좌리스트 출력");
-            console.log("AccessToken : " + userAccessToken);
-            if(body.rsp_code == 'A0000'){
-                var resList = body.res_list;
-                
-                console.log(JSON.stringify(resList));
-                console.log(body.res_list[0].fin_use_num);
-
-                finUseNum = body.res_list[0].fin_use_num;
-
-                //db에 계좌정보와 토큰 등을 저장
-                getConnection((conn) => {
-                    var sql = "INSERT INTO fintech.user (name, id, password, accesstoken, authorization, fin_usenum) VALUES (?, ?, ?, ?, ?, ?)";
-                    conn.query(
-                        sql, // sql execute
-                        [userName, userId, userPassword, userAccessToken, authorization, finUseNum],
-                        function(err, result){
-                            if(err){
-                                console.error(err);
-                                res.json(0);
-                                throw err;
-                            }
-                            else{
-                                res.json(1);
-                            }
-                        })
-                
-                    conn.release();
-                  });
-            }else{
-                console.log('조회에러발생');
-                res.json(3);
-            }
-        }
-    })
-
-
+    //db에 계좌정보와 토큰 등을 저장
+    getConnection((conn) => {
+        var sql = "INSERT INTO fintech.user (name, id, password, accesstoken, authorization, fin_usenum, user_seq_no) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        conn.query(
+            sql, // sql execute
+            [userName, userId, userPassword, userAccessToken, authorization, finUseNum, userSeqNo],
+            function(err, result){
+                if(err){
+                    console.error(err);
+                    res.json(0);
+                    throw err;
+                }
+                else{
+                    res.json(1);
+                }
+            })
     
-    
-    
+        conn.release();
+      });
 
 })
 
+router.post('/retrieve', function(req, res, next){
+   
+    var userAccessToken = req.body.userAccessToken;
+    var userSeqNo = req.body.userSeqNo;
+    var option ={
+        url
+    }
+})
 
 
 module.exports = router;
