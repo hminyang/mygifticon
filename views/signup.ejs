@@ -123,17 +123,20 @@
                     authorization : authorization
                 },
                 success: function(responseResult){
-					console.log(responseResult);
-					if(responseResult == '1'){
-            alert("signup success!!!");
-            window.location.href = "/user"
-					}
-					else{
-						alert("failure....");
-					}
-                 }
-            })
-        })
+                  console.log("db저장시도 결과 : " + responseResult);
+                  if(responseResult == '1'){
+                    alert("signup success!!!");
+                    window.location.href = "/user"
+                  }
+                  else if(responseResult == '3'){
+                    alert("계좌정보 조회 실패");
+                  }
+                  else{
+                    alert("failure....");
+                  }
+                        }
+                    })
+                })
     </script>
 </html>
 
