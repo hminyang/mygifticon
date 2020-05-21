@@ -18,8 +18,9 @@ router.post('/generate', function (req, res)  {
   var issued_date = new Date(); // 발행 시간은 서버의 현재 시간
   var expiry_date = new Date();
   expiry_date.setMonth(expiry_date.getMonth() + 1); // 기프티콘 유효기간은 1달
-  var item_list = req.body.item_list  // 메뉴의 menu_key, count로 구성된 2차원 배열
-  var price = req.body.price;
+  var item_list = JSON.parse(req.body.item_list)  // 메뉴의 menu_key, count로 구성된 2차원 배열
+  var price = req.body.tran_amt;
+
 
   getConnection((conn) => {
     // 기프티콘 저장
@@ -127,15 +128,9 @@ router.post('/scan', function (req, res)  {
                 })
   
                 res.json({'status' : 1,
-<<<<<<< HEAD
-                          'item_list' : arr,
                           'price' : price,
-                          'gifticon_key': gifticon_key});
-=======
-                          'price' : result[0]['price'],
                           'gifticon_key' : qrcode,
                           'item_list' : arr});
->>>>>>> 400dc81c4d01bd4cdece4f8b23f8681ffecb6c9e
               }
             })  // end of inner query
           }
@@ -162,21 +157,23 @@ router.post('/use', function(req, res) {
         if(err) {
           console.error(err);
         } else {
-          res.json({
-            'status' : 1
-          })
+          res.json(1);
         }
       }
-    )
-  });
+    ) 
+    conn.release();
+  }); 
 })
 
 
 // 기프티콘 구성 상품 페이지 리턴
 router.get('/itemlist', function(req, res) {
   var item_list = JSON.parse(req.query.item_list);
-  console.log(item_list);
-  res.render('itemlist', {data : item_list});
+  var price = req.query.price;
+  var gifticon_key = req.query.gifticon_key;
+  //console.log(item_list);
+  //console.log(">>>>>>>>>>>>>>>>>>>>>>"+price);
+  res.render('itemlist', {data : item_list, price : price, gifticon_key: gifticon_key});
 });
 
 

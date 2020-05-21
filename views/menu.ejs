@@ -193,16 +193,10 @@ $("#buyBtn").click(function() {
         type: 'POST',
         data: {
           step : "buy",
-          price : priceData,
-<<<<<<< HEAD
+          tran_amt : priceData,
           store_name : store_name,
           //여기서는 구매자가 user
           user_key : "7"
-=======
-          store_key : store_key,
-          user_key : user_key,
-          item_list : JSON.stringify(itemlist),
->>>>>>> fec810ead9751d5bb833edf1373000ecf2faf0f7
         },
         success: function(result) {
             //console.log(result["tran_amt"])
@@ -218,7 +212,7 @@ $("#buyBtn").click(function() {
                 data: {
                   store_key : store_key,
                   user_key : "7",
-                  price : priceData,
+                  tran_amt : priceData,
                   item_list : JSON.stringify(itemlist)
                 },
                 

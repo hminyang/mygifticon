@@ -80,16 +80,16 @@
       </footer>
 
     </div>
-    <div style="display:none" id="gifticon_key"><%=data[0].gifticon_key%></div>
-    <div style="display:none" id="price"><%=data[0].price%></div>
+    <div style="display:none" id="gifticon_key"><%=gifticon_key%></div>
+    <div style="display:none" id="price"><%=price%></div>
 
     <script type="text/javascript" src="http://localhost:3000/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="http://localhost:3000/js/instascan.min.js"></script>
 <script>
 
 $("#useBtn").click(function() {
-      var gifticon_key = document.getElementById("gifticon_key").textContent;
       var price = document.getElementById("price").textContent;
+      var gifticon_key = document.getElementById("gifticon_key").textContent;
 
       var confirm_msg = "기프티콘을 사용하시겠습니까?";
       var confirmflag = confirm(confirm_msg);
@@ -100,12 +100,27 @@ $("#useBtn").click(function() {
           type: 'POST',
           data: {
             step : "use",
-            price : price,
+            tran_amt : price,
             //여기서는 사업자가 user
             user_key : "5"
           },
           success: function(result) {
-            
+            if(result.rsp_code=="A0000"){
+              alert("기프티콘이 사용되었습니다!");
+
+              $.ajax({
+                url: "/qrcode/use",
+                type: 'POST',
+                data: {
+                  gifticon_key: gifticon_key
+                },
+                success: function(result) {
+                  if(result==1){
+                    window.location.href="http://localhost:3000/qrcode/scan";
+                  }
+                }
+              })
+            }
           }
         })
       }
