@@ -145,12 +145,14 @@ $(".plusbtn").click(function(){
 })
 
 $(".minusbtn").click(function(){
-        
-        const btn =event.target; //event.target 이벤트를 발생시킨 애
-         const price =btn.parentNode.parentNode.querySelector(".price").innerText;
+  const btn =event.target; //event.target 이벤트를 발생시킨 애
+ 
+  const count=btn.parentNode.querySelector("input").value;
+  if(count=="0") return;
+                const price =btn.parentNode.parentNode.querySelector(".price").innerText;
          totalprice-=Number(price);
          total.innerText=totalprice;
-        const count=btn.parentNode.querySelector("input").value;
+        
         
         btn.parentNode.querySelector("input").value=Number(count)-1;
 
