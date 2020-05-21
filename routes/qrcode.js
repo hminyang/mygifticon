@@ -160,6 +160,8 @@ router.post('/use', function(req, res) {
         }
       }
     )
+
+    conn.release();
   });
 })
 
