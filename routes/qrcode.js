@@ -2,11 +2,14 @@ const mysql = require('mysql');
 var express = require('express');
 var router = express.Router();
 var getConnection = require('../lib/db');
-
+//기프티콘 qr코드 보여주기
 router.get('/',function(req,res){
-  //기프티콘 페이지
-  
+  var gifticon_key= req.query.gifticon_key;
+  //console.log(gifticon_key);
+  res.render('qrcode',{data:gifticon_key});
 })
+
+
 
 // 기프티콘 DB에 추가 후 QR코드로 나타낼 값 리턴
 router.post('/generate', function (req, res)  {
@@ -16,13 +19,14 @@ router.post('/generate', function (req, res)  {
   var expiry_date = new Date();
   expiry_date.setMonth(expiry_date.getMonth() + 1); // 기프티콘 유효기간은 1달
   var item_list = req.body.item_list  // 메뉴의 menu_key, count로 구성된 2차원 배열
+  var price = req.body.price;
 
   getConnection((conn) => {
     // 기프티콘 저장
-    var sql = "INSERT INTO gifticon (store_key, owner, expiry_date, issued_date) VALUES (?,?,?,?)";
+    var sql = "INSERT INTO gifticon (store_key, owner, expiry_date, issued_date, price) VALUES (?,?,?,?,?)";
     conn.query(
       sql,
-      [store_key, owner, expiry_date, issued_date],
+      [store_key, owner, expiry_date, issued_date, price],
       function(err, result) {
         if(err) {
           console.error(err);
@@ -75,6 +79,7 @@ router.get('/scan', function (req, res)  {
   res.render('scanner');
 });
 
+// 현재는 다른 사업자가 발급한 기프티콘 사용 불가 처리 X
 // DB를 조회해서 해당 QR코드 값이 존재하면, 구성 상품 목록 리턴
 router.post('/scan', function (req, res)  {
   var qrcode = req.body.qrcode;
@@ -120,6 +125,8 @@ router.post('/scan', function (req, res)  {
                 })
   
                 res.json({'status' : 1,
+                          'price' : result[0]['price'],
+                          'gifticon_key' : qrcode,
                           'item_list' : arr});
               }
             })  // end of inner query
@@ -132,8 +139,36 @@ router.post('/scan', function (req, res)  {
   })
 });
 
+
+router.post('/use', function(req, res) {
+  var used_date = new Date();
+  var gifticon_key = req.body.gifticon_key;
+
+  getConnection((conn) => {
+    var sql = 'UPDATE gifticon SET used_date = ? WHERE gifticon_key = ?';
+
+    conn.query(
+      sql,
+      [used_date, gifticon_key],
+      function(err, result) {
+        if(err) {
+          console.error(err);
+        } else {
+          res.json({
+            'status' : 1
+          })
+        }
+      }
+    )
+  });
+})
+
+
 // 기프티콘 구성 상품 페이지 리턴
 router.get('/itemlist', function(req, res) {
+  var item_list = JSON.parse(req.query.item_list);
+  console.log(item_list);
+  res.render('itemlist', {data : item_list});
 });
 
 

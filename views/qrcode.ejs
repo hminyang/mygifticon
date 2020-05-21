@@ -3,7 +3,7 @@
 <html lang="en">
   
   <%- include('header') %>
-
+<body>
     <div class="container">
       <div class="page-header" id="banner">
         <div class="row">
@@ -24,8 +24,9 @@
             <div class="bs-component">
               <br>
               <div class="jumbotron">
-                <h1 class="display-3">This is QRcode Test Page!</h1>
+                <p class="display-3">This is QRcode Test Page!</p>
                 </p>
+                <div id="qrcode"></div>
               </div>
             </div>
           </div>
@@ -36,5 +37,18 @@
 
 
     </div>
+    <div style="display:none" id="gifticon_key"><%=data%></div>
+    <!-- JQuery library file. requared all pages -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<!-- Template global script file. requared all pages -->
+<script src="js/qrcode.js"> </script>
+<script src="js/global.script.js"></script>
+<script>
+  
+  var gifticon_key=document.getElementById("gifticon_key").textContent;
+  //console.log(gifticon_key);
+  new QRCode(document.getElementById("qrcode"),gifticon_key);
+</script>
+  </body>
 
 </html>
