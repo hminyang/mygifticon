@@ -10,7 +10,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res){
-  console.log("들어와따")
   var userId = req.body.userId;
   var userPassword = req.body.userPassword;
 
@@ -38,7 +37,8 @@ router.post('/', function(req, res){
                         jwt.sign(
                         {
                             userId : result[0].id,
-                            userEmail : result[0].email
+                            fin_usenum : result[0].fin_usenum,
+                            authorization : result[0].authorization
                         },
                         tokenKey,
                         {
@@ -48,7 +48,14 @@ router.post('/', function(req, res){
                         },
                         function(err, token){
                             console.log('로그인 성공', token);
-                            res.json(token)
+                            var info = {
+                                jwt : token,
+                                userId : result[0].id,
+                                fin_usenum : result[0].fin_usenum,
+                                authorization : result[0].authorization,
+                                accessToken : result[0].accessToken
+                            }
+                            res.json(info)
                         }
                         )
                     }

@@ -26,6 +26,7 @@ const user = require('./routes/user');
 const payment = require('./routes/payment');
 const qrcode = require('./routes/qrcode');
 const signup = require('./routes/signup');
+const store = require('./routes/store');
 
 
 app.get('/main', function(req, res){
@@ -51,6 +52,7 @@ app.use('/payment', payment);
 app.use('/qrcode', qrcode);
 /* /users 요청을 모두 /routes/index.js로 */
 app.use('/signup', signup);
+app.use('/store', store);
 
 // 404 처리 미들웨어
 // app.use(function(req, res, next) {
