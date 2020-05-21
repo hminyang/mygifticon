@@ -22,7 +22,7 @@
             </div>
             <div class="bs-component">
               <div class="alert alert-dismissible alert-light">
-                <h2 class="card-title text-center"><span id="store_name">★★Cafe</span></h2> 
+                <h2 class="card-title text-center"><span id="store_name">★★<%=data[0].cafename%>★★</span></h2> 
               </div>
             </div>
           </div>
@@ -46,15 +46,19 @@
                     <% if(data != null && data.length > 0){ %>
                       
                       <% for ( var i = 0; i < data.length; i++){ %>
+                        
                         <tr>
                           <td><%=data[i].name%></td>
-                          <td class="price"><%=data[i].price%></td>
-                          <td>
+                          <td text-align="center" valign="middle" rowspan="2" class="price"><%=data[i].price%></td>
+                          <td valign="middle" rowspan="2" text-align="center">
                             <div style="display:none"><%=data[i].menu_key%></div>
                             <input type="text" size="3" value="0"></input>
                             <button  type="button" class="btn btn-primary plusbtn">+</button>
                             <button type="button" class="btn btn-primary minusbtn">-</button>
                           </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-top: 0px; padding-bottom: 0px; font-size:10px;"><%=data[i].description%></td>
                         </tr>
                       <% } %>
                     <% } %>
@@ -141,12 +145,14 @@ $(".plusbtn").click(function(){
 })
 
 $(".minusbtn").click(function(){
-        
-        const btn =event.target; //event.target 이벤트를 발생시킨 애
-         const price =btn.parentNode.parentNode.querySelector(".price").innerText;
+  const btn =event.target; //event.target 이벤트를 발생시킨 애
+ 
+  const count=btn.parentNode.querySelector("input").value;
+  if(count=="0") return;
+                const price =btn.parentNode.parentNode.querySelector(".price").innerText;
          totalprice-=Number(price);
          total.innerText=totalprice;
-        const count=btn.parentNode.querySelector("input").value;
+        
         
         btn.parentNode.querySelector("input").value=Number(count)-1;
 
@@ -193,10 +199,10 @@ $("#buyBtn").click(function() {
         type: 'POST',
         data: {
           step : "buy",
-          tran_amt : priceData,
+          price : priceData,
           store_name : store_name,
           //여기서는 구매자가 user
-          user_key : "7"
+          user_key : user_key
         },
         success: function(result) {
             //console.log(result["tran_amt"])

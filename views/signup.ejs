@@ -111,6 +111,27 @@
             // }
             // console.log("권한 : " + authorization);
             $.ajax({
+                url: "/signup/retrieve",
+                type : 'POST',
+                data:{
+                    userAccessToken : userAccessToken,
+                    userSeqNo : userSeqNo,
+                },
+                success: function(responseResult){
+                  console.log("계좌정보 조회 : " + responseResult);
+                  if(responseResult.code == '1'){
+                    alert("finNum" + responseResult.userFinNum);
+                  }
+                  else if(responseResult == '3'){
+                    alert("계좌정보 조회 실패");
+                  }
+                  else{
+                    alert("failure....");
+                  }
+              }
+            })
+
+            $.ajax({
                 url: "/signup",
                 type : 'POST',
                 data:{
@@ -126,17 +147,14 @@
                   console.log("db저장시도 결과 : " + responseResult);
                   if(responseResult == '1'){
                     alert("signup success!!!");
-                    window.location.href = "/user"
-                  }
-                  else if(responseResult == '3'){
-                    alert("계좌정보 조회 실패");
+                    window.location.href = "/user";
                   }
                   else{
                     alert("failure....");
                   }
-                        }
-                    })
-                })
+              }
+            })
+        })
     </script>
 </html>
 

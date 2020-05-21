@@ -54,7 +54,7 @@ router.post('/', function(req, res){
                                 userId : result[0].id,
                                 fin_usenum : result[0].fin_usenum,
                                 authorization : result[0].authorization,
-                                accessToken : result[0].accessToken
+                                accessToken : result[0].accessToken,
                             }
                             res.json(info)
                         }
