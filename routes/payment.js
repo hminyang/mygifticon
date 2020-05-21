@@ -87,13 +87,20 @@ router.post('/', function(req, res, next) {
                                 else{
                                     console.log(body)
                                     //console.log(body.tran_amt)
+
+                                    if(body.rsp_code == "A0000"){
         
-                                    res.json({
-                                            'bank_name': body.bank_name,
-                                            'account_num_masked': body.account_num_masked,
-                                            'tran_amt': body.tran_amt,
-                                            'wd_limit_remain_amt': body.wd_limit_remain_amt});
-                                        }
+                                        res.json({
+                                                'bank_name': body.bank_name,
+                                                'account_num_masked': body.account_num_masked,
+                                                'tran_amt': body.tran_amt,
+                                                'wd_limit_remain_amt': body.wd_limit_remain_amt});
+                                    }
+                                    else{
+                                        res.json(0)
+                                        //alert("결제실패")
+                                    }
+                                }
                             })
                 }
                 //use gft
@@ -137,10 +144,8 @@ router.post('/', function(req, res, next) {
                                 }
                                 else{
                                     console.log(body)
-                                    //console.log(body.tran_amt)
-        
-                                    res.json(body);
-                                        }
+                                    res.json(body)
+                                }
                             })
 
                 }

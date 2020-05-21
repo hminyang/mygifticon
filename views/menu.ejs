@@ -22,7 +22,7 @@
             </div>
             <div class="bs-component">
               <div class="alert alert-dismissible alert-light">
-                <h2 class="card-title text-center"><span id="store_name">★★<%=data[0].cafename%>★★</span></h2> 
+                <h2 class="card-title text-center"><span id="store_name"><%=data[0].cafename%></span></h2> 
               </div>
             </div>
           </div>
@@ -199,7 +199,7 @@ $("#buyBtn").click(function() {
         type: 'POST',
         data: {
           step : "buy",
-          price : priceData,
+          tran_amt : priceData,
           store_name : store_name,
           //여기서는 구매자가 user
           user_key : user_key
@@ -223,8 +223,13 @@ $("#buyBtn").click(function() {
                 },
                 
                 success: function(result) {
-                  console.log(result.gifticon_key)
-                  window.location.href="http://localhost:3000/qrcode?gifticon_key="+result.gifticon_key;
+                  if(result==0){
+                    alert("결제실패!")
+                  }
+                  else{
+                    console.log(result.gifticon_key)
+                    window.location.href="http://localhost:3000/qrcode?gifticon_key="+result.gifticon_key;
+                  }
                 }
 
             });

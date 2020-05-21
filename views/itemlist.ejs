@@ -22,7 +22,7 @@
             </div>
             <div class="bs-component">
               <div class="alert alert-dismissible alert-light">
-                <h2 class="card-title text-center"><span id="store_name">★★Cafe</span></h2> 
+                <h2 class="card-title text-center"><span id="store_name"><%=store_name%></span></h2> 
               </div>
             </div>
           </div>
@@ -107,6 +107,7 @@ $("#useBtn").click(function() {
           success: function(result) {
             if(result.rsp_code=="A0000"){
               alert("기프티콘이 사용되었습니다!");
+              //alert(result)
 
               $.ajax({
                 url: "/qrcode/use",

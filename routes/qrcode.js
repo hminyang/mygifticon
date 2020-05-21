@@ -171,9 +171,49 @@ router.get('/itemlist', function(req, res) {
   var item_list = JSON.parse(req.query.item_list);
   var price = req.query.price;
   var gifticon_key = req.query.gifticon_key;
-  //console.log(item_list);
-  //console.log(">>>>>>>>>>>>>>>>>>>>>>"+price);
-  res.render('itemlist', {data : item_list, price : price, gifticon_key: gifticon_key});
+
+  var store_name = ""
+
+  getConnection((conn) => {
+     
+    var sql = "SELECT store_key FROM fintech.gifticon where gifticon_key=?";
+    conn.query(
+      sql,
+      [gifticon_key],
+      function(err, result) {
+        if(err) {
+            console.error(err);
+            throw err;
+        }
+        else {
+          var store_key = result[0].store_key;
+
+          var sql = "SELECT name FROM fintech.user where user_key=?";
+
+          // 해당 기프티콘에 해당되는 상품 목록 저장
+          conn.query(
+            sql,
+            [store_key],
+            function(err, result_) {
+              if(err) {
+                console.error(err);
+              } else {
+                store_name = result_[0].name;
+                //console.log(store_name)
+                res.render('itemlist', {data : item_list, price : price, gifticon_key: gifticon_key, store_name : store_name});
+              }
+            }
+          );
+
+        }
+      }
+    );
+
+    conn.release();
+  });
+
+  //console.log(store_name)
+  
 });
 
 
