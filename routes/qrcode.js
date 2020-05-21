@@ -127,15 +127,9 @@ router.post('/scan', function (req, res)  {
                 })
   
                 res.json({'status' : 1,
-<<<<<<< HEAD
-                          'item_list' : arr,
-                          'price' : price,
-                          'gifticon_key': gifticon_key});
-=======
                           'price' : result[0]['price'],
                           'gifticon_key' : qrcode,
                           'item_list' : arr});
->>>>>>> 400dc81c4d01bd4cdece4f8b23f8681ffecb6c9e
               }
             })  // end of inner query
           }
