@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('header') %>
+    <div class="container">
+
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <p class="lead"></p>
+          </div>
+        </div>
+      </div>
+      <!-- Containers
+      ================================================== -->
+      <div class="bs-docs-section">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="page-header">
+              <h1 id="containers">Containers</h1>
+            </div>
+            <div class="bs-component">
+              <div class="alert alert-dismissible alert-light">
+                <h2 class="card-title text-center">★★CafeList</h2> 
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bs-docs-section">
+
+          <div class="row">
+            <div class="col-lg-12">
+  
+              <div class="bs-component">
+                <table class="table table-hover">
+                  <thead>
+                    <tr class="table-primary">
+                      <th scope="col">카페명</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="cafeList">
+                   
+                  
+                   
+                    
+                   
+                  </tbody>
+                
+                </table> 
+              </div><!-- /example -->
+            </div>
+          </div>
+        </div>
+
+        <%- include('footer') %>
+
+      <script>
+
+$.ajax({
+     url:'/store/storeList',
+     type : 'get',
+    
+     success:function(data){
+       console.log(data)
+       for(var i=0; i < data.length; i++){
+
+                        var tr=document.createElement("tr");//문서에 객체 생성
+                        var div= document.createElement("div");
+                        div.style="display:none";
+                        div.innerText=data[i].user_key;
+                        tr.appendChild(div);
+
+                        var td=document.createElement("td");
+                        td.innerText=data[i].name;
+                        tr.appendChild(td)
+                        var td1=document.createElement("td");
+                        var btn=document.createElement("button");
+                       
+                        btn.classList.add("btn");
+                        btn.classList.add("btn-warning");
+                      
+                        btn.innerText="선택"
+                        btn.addEventListener("click",choice);
+                        td1.appendChild(btn);
+                        tr.appendChild(td1);
+
+                        $("#cafeList").append(tr);
+                        /*
+                        $("#cafeList").append(
+                           ` <tr>
+                            <div style="display:none">${data[i].user_key}</div>
+                          <td>${data[i].name} </td>
+                          <td class="price"></td>
+                          <td>
+                       
+                            <button type="button" class="btn btn-warning choicebtn">선택</button>
+                          </td>
+                        </tr>`
+                        )*/
+                    }
+                }
+     
+   })
+  /*
+   $(".choicebtn").click(function() { 
+      alert("클릭");
+   })*/
+   function choice(event){
+    //alert("클릭");
+    const btn =event.target; 
+      const store_key =btn.parentNode.parentNode.querySelector("div").innerText;
+      console.log(store_key);
+
+      window.location.href = `/menu?store_key=${store_key}`;
+   }
+   
+      </script>
+
+    </div>
+    
+
+ 
+
+  
+</html>
