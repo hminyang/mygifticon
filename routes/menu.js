@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   
   var store_id= req.query.store_key;
     getConnection((conn) => {
-        var sql = "SELECT * FROM fintech.menu where store_key=?";
+        var sql = "SELECT A.menu_key, A.store_key, A.name, A.description,A.price,A.img,B.name as cafename FROM fintech.menu A  INNER JOIN fintech.user B ON A.store_key = B.user_key AND A.store_key = ?";
         conn.query(
           sql,
           [store_id],
